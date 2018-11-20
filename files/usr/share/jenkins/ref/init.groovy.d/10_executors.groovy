@@ -1,4 +1,5 @@
 #!groovy
 
-import jenkins.model.*
+import jenkins.model.Jenkins
+
 Jenkins.instance.setNumExecutors(2)

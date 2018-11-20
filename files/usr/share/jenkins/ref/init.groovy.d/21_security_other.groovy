@@ -7,6 +7,8 @@ import jenkins.security.s2m.AdminWhitelistRule
 import org.kohsuke.stapler.StaplerProxy
 import hudson.tasks.Mailer
 
+def jlc = JenkinsLocationConfiguration.get()
+
 println("--- Configuring Remoting (JNLP4 only, no Remoting CLI)")
 Jenkins.instance.getDescriptor("jenkins.CLI").get().setEnabled(false)
 Jenkins.instance.agentProtocols = new HashSet<String>(["JNLP4-connect"])
@@ -23,11 +25,15 @@ if (Jenkins.instance.crumbIssuer == null) {
 }
 
 println("--- Configuring Quiet Period")
-
 // We do not wait for anything
 Jenkins.instance.quietPeriod = 0
 Jenkins.instance.save()
 
 println("--- Configuring Email global settings")
-JenkinsLocationConfiguration.get().adminAddress = "admin@non.existent.email"
+jlc.adminAddress = "admin@non.existent.email"
 Mailer.descriptor().defaultSuffix = "@non.existent.email"
+
+def Root_URL = System.getenv('JENKINS_ROOT_URL')
+println("--- Configuring Root URL: ${Root_URL}")
+jlc.setUrl(Root_URL)
+jlc.save()

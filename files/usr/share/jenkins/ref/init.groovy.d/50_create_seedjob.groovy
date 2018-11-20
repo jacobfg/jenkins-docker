@@ -67,7 +67,20 @@ if (!Jenkins.instance.getItem(jobName)) {
     println("--- Create Seed Job")
     def seedJob = Jenkins.instance.createProjectFromXML(jobName, xmlStream)
     seedJob.scheduleBuild(0, null)
-    sleep(5000) // move to 95_x and change to wait to not building
+
+    seedJob = Jenkins.instance.getItem(jobName)
+
+    def running = (seedJob.lastBuild != null) ? seedJob.lastBuild.building : true
+    // wait for job builds to complete
+    while(true) {
+      if (!running) break
+      println("--- Waiting for Seed Job to finish")
+      sleep(1000)
+      // update status info
+      seedJob = Jenkins.instance.getItem(jobName)
+      running = seedJob.lastBuild.building
+    }
+
   } catch (ex) {
     println "ERROR: ${ex}"
     println configXml.stripIndent()

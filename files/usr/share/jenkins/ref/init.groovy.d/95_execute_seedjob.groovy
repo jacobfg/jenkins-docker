@@ -1,20 +1,21 @@
 #!groovy
 
-import hudson.model.*;
+import jenkins.model.Jenkins
+import hudson.model.FreeStyleProject
 
 // define a pattern, which jobs I do not want to run
 def jobName = "SeedJob"
 
 // get all jobs which exists
-jobs = Hudson.instance.getAllItems(FreeStyleProject)
+def jobs = Jenkins.instance.getAllItems(FreeStyleProject)
 
 // iterate through the jobs
-seedJob = jobs.find { it.getName() == jobName }
+def seedJob = Jenkins.instance.getItem(jobName)
 
-println("--- Reset Seed Job")
+println("--- Clean Seed Job Build History")
 seedJob.getBuilds().each { it.delete() }
 seedJob.nextBuildNumber = 1
 seedJob.save()
 
-println("--- Rerun Seed Job")
+println("--- Rerunning Seed Job, Scripts Approved")
 seedJob.scheduleBuild(0, null)
