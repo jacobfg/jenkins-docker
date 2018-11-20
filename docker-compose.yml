@@ -30,6 +30,7 @@ services:
     secrets:
       - jenkins-user
       - jenkins-pass
+      - jenkins-global-vars
     environment:
       - SEEDJOB_GIT_URL=file:///git-cache/jenkins-jobs.git
       - SEEDJOB_GIT_REF=jobs
@@ -44,3 +45,5 @@ secrets:
     file: ./.jenkins-user.txt
   jenkins-pass:
     file: ./.jenkins-pass.txt
+  jenkins-global-vars:
+    file: ./.global-vars.json
