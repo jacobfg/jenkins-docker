@@ -1,0 +1,39 @@
+---
+#
+# docker-compose up -d
+#
+# docker-compose stop
+# docker-compose rm
+#
+
+version: '3.1'
+
+services:
+  jenkins:
+    image: local/jenkins:lts
+    # labels:
+    #   kompose.service.type: nodeport
+    ports:
+      # - '80:8080'
+      - '8081:8080/tcp'
+      - '502:20/tcp'
+      - '50001:50000/tcp'
+    volumes:
+      - './jenkins_home:/var/jenkins_home'
+      - '../git-cache:/git-cache'
+    secrets:
+      - jenkins-user
+      - jenkins-pass
+    environment:
+      - SEEDJOB_GIT_URL=file:///git-cache/jenkins-jobs.git
+      - SEEDJOB_GIT_REF=jobs
+
+# volumes:
+#   jenkins_home:
+#     driver: local
+
+secrets:
+  jenkins-user:
+    file: ./.jenkins-user.txt
+  jenkins-pass:
+    file: ./.jenkins-pass.txt
