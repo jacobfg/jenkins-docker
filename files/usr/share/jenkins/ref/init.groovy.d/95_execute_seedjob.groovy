@@ -9,16 +9,14 @@ def jobName = "SeedJob"
 jobs = Hudson.instance.getAllItems(FreeStyleProject)
 
 // iterate through the jobs
-for (j in jobs) {
-  println "Starting ${j.getName()}"
+job = (j in jobs).find { j.getName() == jobName }
 
-  if (j.getName() == jobName) {
-    println "Starting SeedJob"
-    // first check, if job is buildable
-    // if (j instanceof BuildableItem) {
-      // run that job
-      j.scheduleBuild(0, null)
-    // }
-  }
-
+println("--- Reset Seed Job")
+job.getBuilds().each { it.delete() }
+if (resetBuildNumber) {
+  job.nextBuildNumber = 1
+  job.save()
 }
+
+println("--- Rerun Seed Job")
+job.scheduleBuild(0, null)

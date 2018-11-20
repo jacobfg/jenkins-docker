@@ -1,3 +1,5 @@
+#!groovy
+
 import jenkins.model.*
 
 def jobName = "SeedJob"
@@ -62,9 +64,10 @@ def configXml = """\
 if (!Jenkins.instance.getItem(jobName)) {
   def xmlStream = new ByteArrayInputStream(configXml.getBytes())
   try {
+    println("--- Create Seed Job")
     def seedJob = Jenkins.instance.createProjectFromXML(jobName, xmlStream)
     seedJob.scheduleBuild(0, null)
-    sleep(5000)
+    sleep(5000) // move to 95_x and change to wait to not building
   } catch (ex) {
     println "ERROR: ${ex}"
     println configXml.stripIndent()
