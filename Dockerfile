@@ -7,7 +7,6 @@ RUN echo 2.0 > /usr/share/jenkins/ref/jenkins.install.UpgradeWizard.state ; \
     /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
 
 ENV JAVA_OPTS '-Djenkins.install.runSetupWizard=false'
-# -Dhudson.footerURL=http://onamish.com
 
 # COPY https.pem /var/lib/jenkins/cert
 # COPY https.key /var/lib/jenkins/pk
