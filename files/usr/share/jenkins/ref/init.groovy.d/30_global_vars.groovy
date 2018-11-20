@@ -14,7 +14,7 @@ println("--- Setting Global Variables")
 
 // skip if missing or parse error
 try {
-  def text = new File("/run/secrets/jenkins-global-vars").text
+  def text = new File("/run/secrets/jenkins-config").text
   def json = new JsonSlurper().parseText(text)
 
   envVars = null
@@ -26,7 +26,7 @@ try {
     envVars = envVarsNodePropertyList.get(0).getEnvVars()
   }
 
-  json.each {
+  json['global_variables'].each {
     println("--- Adding ${it['name']}")
     envVars.put(it["name"], it["value"])
   }

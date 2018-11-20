@@ -82,7 +82,7 @@ if (!Jenkins.instance.getItem(jobName)) {
     }
 
   } catch (ex) {
-    println "ERROR: ${ex}"
+    println "--- ERROR: ${ex}"
     println configXml.stripIndent()
   }
 }
