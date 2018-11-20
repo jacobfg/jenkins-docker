@@ -6,6 +6,12 @@
 # docker-compose rm
 #
 
+#
+# docker-compose stop && docker-compose rm -f
+#
+# rm -rf jenkins_home/ && docker build -t local/jenkins:lts . && docker-compose up -d
+#
+
 version: '3.1'
 
 services:
@@ -27,6 +33,7 @@ services:
     environment:
       - SEEDJOB_GIT_URL=file:///git-cache/jenkins-jobs.git
       - SEEDJOB_GIT_REF=jobs
+      - JENKINS_ROOT_URL=http://localhost:8081/
 
 # volumes:
 #   jenkins_home:

@@ -3,7 +3,7 @@ import jenkins.model.*
 def jobName = "SeedJob"
 
 def SeedJob_Git_Ref = System.getenv('SEEDJOB_GIT_REF')
-def SeedJob_Git_Url = System.getenv('SEEDJOB_GIT_Url')
+def SeedJob_Git_Url = System.getenv('SEEDJOB_GIT_URL')
 
 def configXml = """\
 <?xml version='1.1' encoding='UTF-8'?>
@@ -60,10 +60,11 @@ def configXml = """\
 
 
 if (!Jenkins.instance.getItem(jobName)) {
-  def xmlStream = new ByteArrayInputStream( configXml.getBytes() )
+  def xmlStream = new ByteArrayInputStream(configXml.getBytes())
   try {
     def seedJob = Jenkins.instance.createProjectFromXML(jobName, xmlStream)
     seedJob.scheduleBuild(0, null)
+    sleep(5000)
   } catch (ex) {
     println "ERROR: ${ex}"
     println configXml.stripIndent()

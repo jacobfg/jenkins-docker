@@ -1,6 +1,7 @@
 FROM jenkins/jenkins:lts
 
 USER root
+
 COPY /files/ /
 
 RUN echo 2.0 > /usr/share/jenkins/ref/jenkins.install.UpgradeWizard.state ; \
@@ -21,6 +22,5 @@ ENV JAVA_OPTS '-Djenkins.install.runSetupWizard=false'
 # java.util.logging.ConsoleHandler.level=FINEST
 # EOF
 # docker run --name myjenkins -p 8080:8080 -p 50000:50000 --env JAVA_OPTS="-Djava.util.logging.config.file=/var/jenkins_home/log.properties" -v `pwd`/data:/var/jenkins_home jenkins/jenkins:lts
-
 
 USER jenkins

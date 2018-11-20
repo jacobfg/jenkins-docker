@@ -17,4 +17,14 @@ def strategy = new FullControlOnceLoggedInAuthorizationStrategy()
 instance.setAuthorizationStrategy(strategy)
 instance.save()
 
+// def hudsonRealm = new HudsonPrivateSecurityRealm(false)
+// hudsonRealm.createAccount(user, pass)
+// instance.setSecurityRealm(hudsonRealm)
+//
+// // def strategy = new FullControlOnceLoggedInAuthorizationStrategy()
+// def strategy = new GlobalMatrixAuthorizationStrategy()
+// strategy.add(Jenkins.READ, 'authenticated')
+// instance.setAuthorizationStrategy(strategy)
+// instance.save()
+
 Jenkins.instance.getInjector().getInstance(AdminWhitelistRule.class).setMasterKillSwitch(false)
