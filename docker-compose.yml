@@ -21,29 +21,25 @@ services:
     #   kompose.service.type: nodeport
     ports:
       # - '80:8080'
-      - '8081:8080/tcp'
+      - '8080:8080/tcp'
       - '502:20/tcp'
       - '50001:50000/tcp'
     volumes:
       - './jenkins_home:/var/jenkins_home'
       - '../git-cache:/git-cache'
     secrets:
-      - jenkins-user
-      - jenkins-pass
-      - jenkins-config
+      - sshkey
+      - adminpw
+      - jcacs-config.yml
     environment:
       - SEEDJOB_GIT_URL=file:///git-cache/jenkins-jobs.git
       - SEEDJOB_GIT_REF=jobs
-      - JENKINS_ROOT_URL=http://localhost:8081/
-
-# volumes:
-#   jenkins_home:
-#     driver: local
+      - CASC_JENKINS_CONFIG=/run/secrets/jcacs-config.yml
 
 secrets:
-  jenkins-user:
-    file: ./.jenkins-user.txt
-  jenkins-pass:
-    file: ./.jenkins-pass.txt
-  jenkins-config:
-    file: ./.jenkins-config.json
+  adminpw:
+    file: ./.adminpw
+  sshkey:
+    file: ./.ssh-key.pri
+  jcacs-config.yml:
+    file: ./.jcacs-config.yml

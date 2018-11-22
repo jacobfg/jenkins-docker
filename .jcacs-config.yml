@@ -1,0 +1,110 @@
+---
+plugins:
+  sites:
+  - id: default
+    url: https://updates.jenkins.io/update-center.json
+
+unclassified:
+  location:
+    adminAddress: admin@non.existent.email
+    url: http://localhost:8080/
+
+  simple-theme-plugin:
+    elements:
+    - cssUrl:
+        url: https://tobix.github.io/jenkins-neo2-theme/dist/neo-light.css
+
+# jobs:
+#   - script: >
+#       job('configuration-as-code') {
+#           multiscm {
+#               git {
+#                   id = 'configuration-as-code'
+#                   remote('https://github.com/jenkinsci/configuration-as-code-plugin.git')
+#               }
+#           }
+#       }
+
+tool:
+  git:
+    installations:
+      - name: Default
+        home: "git"
+  # jdk:
+  #   defaultProperties:
+  #   - installSource:
+  #       installers:
+  #       - jdkInstaller:
+  #           acceptLicense: true
+
+security:
+  remotingCLI:
+    enabled: false
+
+jenkins:
+  agentProtocols:
+  - JNLP4-connect
+  - Ping
+  authorizationStrategy:
+    globalMatrix:
+      grantedPermissions:
+        # - "Overall/Read:anonymous"
+        # - "Job/Read:anonymous"
+        # - "View/Read:anonymous"
+        - Overall/Administer:admin
+      # - Permission[class hudson.model.Hudson,Administer]:admin
+  crumbIssuer:
+    standard:
+      excludeClientIPFromCrumb: true
+  disableRememberMe: false
+
+  globalNodeProperties:
+  - envVars:
+      env:
+      - key: AWS_DEFAULT_REGION
+        value: ap-southeast-2
+
+  mode: NORMAL
+  numExecutors: 2
+  primaryView:
+    all:
+      name: all
+  quietPeriod: 0
+  remotingSecurity:
+    enabled: true
+  scmCheckoutRetryCount: 2
+  securityRealm:
+    local:
+      allowsSignup: false
+      enableCaptcha: false
+      users:
+      users:
+       - id: admin
+         password: ${adminpw:-passw0rd}
+  slaveAgentPort: 50000
+  systemMessage: |
+    Welcome to our build server.
+
+    This Jenkins is 100% configured and managed 'as code'.
+    Config is now mostly handled by 'Jenkins Configuration as Code Plugin' (JCasC).
+  views:
+  - all:
+      name: all
+
+credentials:
+  system:
+    domainCredentials:
+    - credentials:
+      - basicSSHUserPrivateKey:
+          description: A description of this credential
+          id: jenkins-ssh
+          privateKeySource:
+            directEntry:
+              privateKey: ${sshkey}
+          username: git
+
+# plugins:
+#   required:
+#     git: 3.6
+#     chucknorris: latest
+#     my-custom-plugin: http://download.acme.com/my-custom-plugin-1.0.jpi
