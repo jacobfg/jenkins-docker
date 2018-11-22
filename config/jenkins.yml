@@ -14,6 +14,14 @@ unclassified:
     - cssUrl:
         url: https://tobix.github.io/jenkins-neo2-theme/dist/neo-light.css
 
+  # add mailer config
+  # mailer:
+  #   adminAddress: admin@acme.org
+  #   replyToAddress: do-not-reply@acme.org
+  #   # Note that this does not work right now
+  #   #smtpHost: smtp.acme.org
+  #   smtpPort: 4441
+
 jobs:
   - script: |
       def SeedJob_Git_Ref = System.getenv('SEEDJOB_GIT_REF')
@@ -119,6 +127,7 @@ credentials:
               privateKey: ${sshkey}
           username: git
 
+# not recommended to install plugins this way, bake into docker image
 # plugins:
 #   required:
 #     git: 3.6
