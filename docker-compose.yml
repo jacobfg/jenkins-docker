@@ -38,8 +38,8 @@ services:
 
 secrets:
   adminpw:
-    file: ./.adminpw
+    file: ./config/adminpw.txt
   sshkey:
-    file: ./.ssh-key.pri
+    file: ./config/ssh-key.pri
   jcacs-config.yml:
-    file: ./.jcacs-config.yml
+    file: ./config/jenkins.yml
