@@ -14,16 +14,35 @@ unclassified:
     - cssUrl:
         url: https://tobix.github.io/jenkins-neo2-theme/dist/neo-light.css
 
-# jobs:
-#   - script: >
-#       job('configuration-as-code') {
-#           multiscm {
-#               git {
-#                   id = 'configuration-as-code'
-#                   remote('https://github.com/jenkinsci/configuration-as-code-plugin.git')
-#               }
-#           }
-#       }
+jobs:
+  - script: |
+      def SeedJob_Git_Ref = System.getenv('SEEDJOB_GIT_REF')
+      def SeedJob_Git_Url = System.getenv('SEEDJOB_GIT_URL')
+
+      job('SeedJob') {
+      //  logRotator(-1, 10)
+        description('Build all Jenkins jobs, views and folder from DSL + Git')
+        keepDependencies(false)
+        concurrentBuild(false)
+        scm {
+          git {
+            remote {
+              url(SeedJob_Git_Url)
+            }
+            branch(SeedJob_Git_Ref)
+            // credentials('jenkins-ssh')
+          }
+        }
+        steps {
+          dsl {
+            external('jobs/testing.groovy')
+            ignoreExisting(false)
+            removeAction("IGNORE")
+            removeViewAction("IGNORE")
+            lookupStrategy("JENKINS_ROOT")
+          }
+        }
+      }
 
 tool:
   git:
@@ -83,10 +102,7 @@ jenkins:
          password: ${adminpw:-passw0rd}
   slaveAgentPort: 50000
   systemMessage: |
-    Welcome to our build server.
-
-    This Jenkins is 100% configured and managed 'as code'.
-    Config is now mostly handled by 'Jenkins Configuration as Code Plugin' (JCasC).
+    This Jenkins is configured and managed 'as code' using JCasC and SeedJob.
   views:
   - all:
       name: all
