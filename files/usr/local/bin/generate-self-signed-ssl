@@ -1,0 +1,31 @@
+#!/bin/sh
+
+# generate self signed ssl certificate only if cert files are nonexistent
+
+cd /etc/ssl/jenkins
+
+if [ -s ssl-cert-snakeoil.key ] || [ -s ssl-cert-snakeoil.pem ] ; then
+    echo "Skipping SSL certificate generation"
+else
+    echo "Generating self-signed certificate"
+
+    # Generate a random password
+    PASSWORD=$(openssl rand -base64 32)
+
+    # Remove this after testing
+    echo ${PASSWORD} > ssl-cert-snakeoil.keypw
+    chmod 0400 ssl-cert-snakeoil.keypw
+
+    # Generating signing SSL private key
+    openssl genrsa -des3 -passout pass:${PASSWORD} -out ssl-cert-snakeoil.withpass.key 2048
+
+    # Removing passphrase from private key
+    openssl rsa -passin pass:${PASSWORD} -in ssl-cert-snakeoil.withpass.key -out ssl-cert-snakeoil.key
+
+    # Generating certificate signing request
+    # /C=AU/ST=NSW/L=Sydney/O=CompanyName
+    openssl req -new -key ssl-cert-snakeoil.key -out ssl-cert-snakeoil.csr -subj "/CN=${1:-localhost.localdomain}"
+
+    # Generating self-signed certificate
+    openssl x509 -req -days 3650 -in ssl-cert-snakeoil.csr -signkey ssl-cert-snakeoil.key -out ssl-cert-snakeoil.pem
+fi

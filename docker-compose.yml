@@ -21,7 +21,7 @@ services:
     #   kompose.service.type: nodeport
     ports:
       # - '80:8080'
-      - '8080:8080/tcp'
+      - '8443:8443/tcp'
       - '502:20/tcp'
       - '50001:50000/tcp'
     volumes:

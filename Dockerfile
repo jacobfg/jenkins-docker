@@ -6,15 +6,14 @@ USER root
 COPY /files/ /
 
 RUN echo 2.0 > /usr/share/jenkins/ref/jenkins.install.UpgradeWizard.state ; \
-    /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
+    /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt ; \
+    mkdir /etc/ssl/jenkins ; \
+    chown jenkins:jenkins -R /etc/ssl/jenkins ; \
+    sed -i "2i /usr/local/bin/generate-self-signed-ssl \"${CERTIFICATE_SUBJECT:-localhost}\"" /usr/local/bin/jenkins.sh
 
 ENV JAVA_OPTS '-Djenkins.install.runSetupWizard=false'
-
-# COPY https.pem /var/lib/jenkins/cert
-# COPY https.key /var/lib/jenkins/pk
-# ENV JENKINS_OPTS --httpPort=-1 --httpsPort=8083 --httpsCertificate=/var/lib/jenkins/cert --httpsPrivateKey=/var/lib/jenkins/pk
-# EXPOSE 8083
-
+ENV JENKINS_OPTS --httpPort=-1 --httpsPort=8443 --httpsCertificate=/etc/ssl/jenkins/ssl-cert-snakeoil.pem --httpsPrivateKey=/etc/ssl/jenkins/ssl-cert-snakeoil.key
+EXPOSE 8443
 
 # mkdir data
 # cat > data/log.properties <<EOF
