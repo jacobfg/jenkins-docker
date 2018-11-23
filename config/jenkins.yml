@@ -48,6 +48,7 @@ jobs:
             removeAction("IGNORE")
             removeViewAction("IGNORE")
             lookupStrategy("JENKINS_ROOT")
+            additionalClasspath('libs/*.jar')
           }
         }
       }

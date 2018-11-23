@@ -21,7 +21,7 @@ ENV JAVA_OPTS '-Djenkins.install.runSetupWizard=false'
 ENV JENKINS_OPTS --httpPort=-1 --httpsPort=8443 --httpsCertificate=/etc/ssl/jenkins/ssl-cert-snakeoil.pem --httpsPrivateKey=/etc/ssl/jenkins/ssl-cert-snakeoil.key
 EXPOSE 8443
 
-COPY /files/usr/share/jenkins/ref/init.groovy.d/seedjob.groovy /usr/share/jenkins/ref/init.groovy.d/seedjob.groovy
+COPY /files/usr/share/jenkins/ref/init.groovy.d/*.groovy /usr/share/jenkins/ref/init.groovy.d/
 COPY /files/usr/share/jenkins/ref/plugins/*.jpi /usr/share/jenkins/ref/plugins/
 
 # mkdir data
