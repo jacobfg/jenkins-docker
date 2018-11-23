@@ -1,1 +1,2 @@
 /jenkins_home export-ignore
+/files/usr/share/jenkins/ref/plugins/ export-ignore
