@@ -1,9 +1,4 @@
 ---
-plugins:
-  sites:
-  - id: default
-    url: https://updates.jenkins.io/update-center.json
-
 unclassified:
   location:
     adminAddress: admin@non.existent.email
@@ -22,6 +17,18 @@ unclassified:
   #   #smtpHost: smtp.acme.org
   #   smtpPort: 4441
 
+  globallibraries:
+    libraries:
+    - defaultVersion: master
+      includeInChangesets: false
+      name: shared-library
+      retriever:
+        modernSCM:
+          scm:
+            git:
+              credentialsId: jenkins-ssh
+              remote: file:///git-cache/shared-libraries.git
+
 jobs:
   - script: |
       def SeedJob_Git_Ref = System.getenv('SEEDJOB_GIT_REF')
@@ -38,17 +45,17 @@ jobs:
               url(SeedJob_Git_Url)
             }
             branch(SeedJob_Git_Ref)
-            // credentials('jenkins-ssh')
+              credentials('jenkins-ssh')
           }
         }
         steps {
           dsl {
             external('jobs/testing.groovy')
             ignoreExisting(false)
-            removeAction("IGNORE")
-            removeViewAction("IGNORE")
-            lookupStrategy("JENKINS_ROOT")
-            additionalClasspath('libs/*.jar')
+            removeAction('IGNORE')
+            removeViewAction('IGNORE')
+            lookupStrategy('JENKINS_ROOT')
+            // additionalClasspath('libs/*.jar')
           }
         }
       }
@@ -57,7 +64,7 @@ tool:
   git:
     installations:
       - name: Default
-        home: "git"
+        home: git
   # jdk:
   #   defaultProperties:
   #   - installSource:
@@ -128,6 +135,10 @@ credentials:
               privateKey: ${sshkey}
           username: git
 
+plugins:
+  sites:
+  - id: default
+    url: https://updates.jenkins.io/update-center.json
 # not recommended to install plugins this way, bake into docker image
 # plugins:
 #   required:
