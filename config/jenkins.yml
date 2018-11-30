@@ -1,4 +1,9 @@
 ---
+plugins:
+  sites:
+  - id: default
+    url: https://updates.jenkins.io/update-center.json
+
 unclassified:
   location:
     adminAddress: admin@non.existent.email
@@ -45,7 +50,7 @@ jobs:
               url(SeedJob_Git_Url)
             }
             branch(SeedJob_Git_Ref)
-              credentials('jenkins-ssh')
+            // credentials('jenkins-ssh')
           }
         }
         steps {
@@ -55,7 +60,7 @@ jobs:
             removeAction('IGNORE')
             removeViewAction('IGNORE')
             lookupStrategy('JENKINS_ROOT')
-            // additionalClasspath('libs/*.jar')
+            additionalClasspath('libs/*.jar')
           }
         }
       }
@@ -135,10 +140,6 @@ credentials:
               privateKey: ${sshkey}
           username: git
 
-plugins:
-  sites:
-  - id: default
-    url: https://updates.jenkins.io/update-center.json
 # not recommended to install plugins this way, bake into docker image
 # plugins:
 #   required:
