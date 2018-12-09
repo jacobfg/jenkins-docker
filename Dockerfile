@@ -1,5 +1,6 @@
-FROM jenkins/jenkins:lts
+# FROM jenkins/jenkins:lts
 # FROM jenkins/jenkins:2.138.3
+FROM jenkins/jenkins:2.150.1
 
 USER root
 
